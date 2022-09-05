@@ -1,60 +1,49 @@
 "use strict";
-const button = document.querySelector("button");
-const input1 = document.getElementById("num1");
-const input2 = document.getElementById("num2");
-function add(num1, num2) {
-  return num1 + num2;
+class Key {
+    constructor() {
+        this.signature = Math.random();
+    }
+    getSignature() {
+        return this.signature;
+    }
 }
-button.addEventListener("click", function () {
-  console.log(add(+input1.value, +input2.value));
-});
-let age = 50;
-let name = "Max";
-let toggle = true;
-let empty = null;
-let notInitialize = undefined;
-let callback = (a) => {
-  return 100 + a;
-};
-let anything = -20;
-anything = "Text";
-anything = {};
-let some;
-some = "Text";
-let str;
-if (typeof some === "string") {
-  str = some;
+class Person {
+    constructor(key) {
+        this.key = key;
+    }
+    getKey() {
+        return this.key;
+    }
 }
-let person;
-var Preparing;
-(function (Preparing) {
-  Preparing[(Preparing["LOADING"] = 0)] = "LOADING";
-  Preparing[(Preparing["READY"] = 1)] = "READY";
-})(Preparing || (Preparing = {}));
-let strOrNum;
-let toggler;
-function showMessage(message) {
-  console.log(message);
+class House {
+    constructor(key) {
+        this.key = key;
+        this.door = false;
+        this.tenants = [];
+    }
+    comeIn(person) {
+        if (this.door) {
+            this.tenants.push(person);
+            console.log(person, " come in");
+        }
+        else {
+            throw new Error(`Door is close, ${person}, cannot come in!`);
+        }
+    }
 }
-function calc(num1, num2) {
-  return num1 + num2;
+class MyHouse extends House {
+    openDoor(key) {
+        if (key.getSignature() === this.key.getSignature()) {
+            return (this.door = true);
+        }
+        else {
+            throw new Error("Its not true key!");
+        }
+    }
 }
-function customError() {
-  throw new Error("Error");
-}
-const page1 = {
-  title: "The awesome page",
-  likes: 100,
-  accounts: ["Max", "Anton", "Nikita"],
-  status: "open",
-  details: {
-    createAt: "2021-01-01",
-    updateAt: "2021-05-01",
-  },
-};
-const page2 = {
-  title: "Python or Js",
-  likes: 5,
-  accounts: ["Alex"],
-  status: "close",
-};
+const key = new Key();
+const house = new MyHouse(key);
+const person = new Person(key);
+house.openDoor(person.getKey());
+house.comeIn(person);
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYXBwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQSxNQUFNLEdBQUc7SUFFUDtRQUNFLElBQUksQ0FBQyxTQUFTLEdBQUcsSUFBSSxDQUFDLE1BQU0sRUFBRSxDQUFDO0lBQ2pDLENBQUM7SUFDTSxZQUFZO1FBQ2pCLE9BQU8sSUFBSSxDQUFDLFNBQVMsQ0FBQztJQUN4QixDQUFDO0NBQ0Y7QUFFRCxNQUFNLE1BQU07SUFDVixZQUFvQixHQUFRO1FBQVIsUUFBRyxHQUFILEdBQUcsQ0FBSztJQUFHLENBQUM7SUFDekIsTUFBTTtRQUNYLE9BQU8sSUFBSSxDQUFDLEdBQUcsQ0FBQztJQUNsQixDQUFDO0NBQ0Y7QUFFRCxNQUFlLEtBQUs7SUFHbEIsWUFBc0IsR0FBUTtRQUFSLFFBQUcsR0FBSCxHQUFHLENBQUs7UUFGcEIsU0FBSSxHQUFZLEtBQUssQ0FBQztRQUN4QixZQUFPLEdBQWEsRUFBRSxDQUFDO0lBQ0UsQ0FBQztJQUVsQyxNQUFNLENBQUMsTUFBYztRQUNuQixJQUFJLElBQUksQ0FBQyxJQUFJLEVBQUU7WUFDYixJQUFJLENBQUMsT0FBTyxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsQ0FBQztZQUMxQixPQUFPLENBQUMsR0FBRyxDQUFDLE1BQU0sRUFBRSxVQUFVLENBQUMsQ0FBQztTQUNqQzthQUFNO1lBQ0wsTUFBTSxJQUFJLEtBQUssQ0FBQyxrQkFBa0IsTUFBTSxtQkFBbUIsQ0FBQyxDQUFDO1NBQzlEO0lBQ0gsQ0FBQztDQUdGO0FBRUQsTUFBTSxPQUFRLFNBQVEsS0FBSztJQUN6QixRQUFRLENBQUMsR0FBUTtRQUNmLElBQUksR0FBRyxDQUFDLFlBQVksRUFBRSxLQUFLLElBQUksQ0FBQyxHQUFHLENBQUMsWUFBWSxFQUFFLEVBQUU7WUFDbEQsT0FBTyxDQUFDLElBQUksQ0FBQyxJQUFJLEdBQUcsSUFBSSxDQUFDLENBQUM7U0FDM0I7YUFBTTtZQUNMLE1BQU0sSUFBSSxLQUFLLENBQUMsbUJBQW1CLENBQUMsQ0FBQztTQUN0QztJQUNILENBQUM7Q0FDRjtBQUVELE1BQU0sR0FBRyxHQUFHLElBQUksR0FBRyxFQUFFLENBQUM7QUFDdEIsTUFBTSxLQUFLLEdBQUcsSUFBSSxPQUFPLENBQUMsR0FBRyxDQUFDLENBQUM7QUFDL0IsTUFBTSxNQUFNLEdBQUcsSUFBSSxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUM7QUFFL0IsS0FBSyxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUMsTUFBTSxFQUFFLENBQUMsQ0FBQztBQUNoQyxLQUFLLENBQUMsTUFBTSxDQUFDLE1BQU0sQ0FBQyxDQUFDIn0=

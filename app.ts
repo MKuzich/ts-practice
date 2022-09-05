@@ -1,84 +1,50 @@
-const button = document.querySelector("button")!;
-const input1 = document.getElementById("num1")! as HTMLInputElement;
-const input2 = document.getElementById("num2")! as HTMLInputElement;
-
-function add(num1: number, num2: number) {
-  return num1 + num2;
+class Key {
+  private signature: number;
+  constructor() {
+    this.signature = Math.random();
+  }
+  public getSignature(): number {
+    return this.signature;
+  }
 }
 
-button.addEventListener("click", function () {
-  console.log(add(+input1.value, +input2.value));
-});
-let age: number = 50;
-let firstName: string = "Max";
-let toggle: boolean = true;
-let empty: null = null;
-let notInitialize: undefined = undefined;
-let callback: Function = (a: number) => {
-  return 100 + a;
-};
-
-let anything: any = -20;
-anything = "Text";
-anything = {};
-
-let some: unknown;
-some = "Text";
-
-let str: string;
-
-if (typeof some === "string") {
-  str = some;
+class Person {
+  constructor(private key: Key) {}
+  public getKey(): Key {
+    return this.key;
+  }
 }
 
-let person: [string, number];
+abstract class House {
+  protected door: boolean = false;
+  private tenants: Person[] = [];
+  constructor(protected key: Key) {}
 
-enum Preparing {
-  LOADING,
-  READY,
+  comeIn(person: Person): void {
+    if (this.door) {
+      this.tenants.push(person);
+      console.log(person, " come in");
+    } else {
+      throw new Error(`Door is close, ${person}, cannot come in!`);
+    }
+  }
+
+  abstract openDoor(key: Key): boolean;
 }
 
-let strOrNum: string | number;
-
-let toggler: "enable" | "disable";
-
-function showMessage(message: string): void {
-  console.log(message);
+class MyHouse extends House {
+  openDoor(key: Key) {
+    if (key.getSignature() === this.key.getSignature()) {
+      return (this.door = true);
+    } else {
+      throw new Error("Its not true key!");
+    }
+  }
 }
 
-function calc(num1: number, num2: number): number {
-  return num1 + num2;
-}
+const key = new Key();
+const house = new MyHouse(key);
+const person = new Person(key);
 
-function customError(): never {
-  throw new Error("Error");
-}
-
-type Page = {
-  title: string;
-  likes: number;
-  accounts: string[];
-  status: "open" | "close";
-  details?: {
-    createAt: string;
-    updateAt: string;
-  };
-};
-
-const page1: Page = {
-  title: "The awesome page",
-  likes: 100,
-  accounts: ["Max", "Anton", "Nikita"],
-  status: "open",
-  details: {
-    createAt: "2021-01-01",
-    updateAt: "2021-05-01",
-  },
-};
-
-const page2: Page = {
-  title: "Python or Js",
-  likes: 5,
-  accounts: ["Alex"],
-  status: "close",
-};
+house.openDoor(person.getKey());
+house.comeIn(person);
